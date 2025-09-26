@@ -1,23 +1,24 @@
-import { google, drive_v3 } from 'googleapis';
-import { getAuthClient } from './google-auth';
+import { google, drive_v3 } from 'googleapis'
+import { OAuth2Client } from 'google-auth-library'
+import { getAuthClient } from './google-auth'
 
-let driveClient: drive_v3.Drive | null = null;
+let driveClient: drive_v3.Drive | null = null
 
 export async function getDriveClient(): Promise<drive_v3.Drive> {
   if (driveClient) {
-    return driveClient;
+    return driveClient
   }
 
-  const authClient = await getAuthClient();
+  const authClient = await getAuthClient()
 
   driveClient = google.drive({
     version: 'v3',
-    auth: authClient,
-  });
+    auth: authClient as OAuth2Client,
+  })
 
-  return driveClient;
+  return driveClient
 }
 
-export const driveFolderId = process.env.GOOGLE_DRIVE_FOLDER_ID;
+export const driveFolderId = process.env.GOOGLE_DRIVE_FOLDER_ID
 
-export const isSharedDrive = process.env.GOOGLE_IS_SHARED_DRIVE === 'true';
+export const isSharedDrive = process.env.GOOGLE_IS_SHARED_DRIVE === 'true'

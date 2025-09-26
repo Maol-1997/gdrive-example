@@ -9,7 +9,7 @@ A modern web-based Google Drive file browser built with Next.js 15, featuring a 
 - 📤 **File Upload** - Drag-and-drop file uploads with progress tracking
 - 📱 **Responsive Design** - Works seamlessly on desktop, tablet, and mobile devices
 - 🎨 **Modern UI** - Built with shadcn/ui components for a polished user experience
-- 🔐 **Secure Authentication** - OAuth 2.0 authentication with Google
+- 🔐 **Service Account Authentication** - Secure access using Google Service Account credentials
 - 🌙 **Dark Mode** - Support for light and dark themes
 
 ## Tech Stack
@@ -18,7 +18,7 @@ A modern web-based Google Drive file browser built with Next.js 15, featuring a 
 - **Language**: TypeScript
 - **Styling**: Tailwind CSS
 - **UI Components**: shadcn/ui (Radix UI)
-- **Authentication**: Google OAuth 2.0
+- **Authentication**: Google Service Account
 - **API**: Google Drive API v3
 - **State Management**: React Hooks with SWR for data fetching
 - **Package Manager**: Bun
@@ -30,7 +30,7 @@ Before you begin, ensure you have:
 - Node.js 18+ installed
 - A Google Cloud Console account
 - Google Drive API enabled in your project
-- OAuth 2.0 credentials configured
+- A Service Account with appropriate permissions
 
 ## Installation
 
@@ -50,23 +50,23 @@ bun install
 Create a `.env.local` file in the root directory with the following variables:
 
 ```env
-# Google OAuth Credentials
-GOOGLE_CLIENT_ID=your_client_id_here
-GOOGLE_CLIENT_SECRET=your_client_secret_here
-GOOGLE_REDIRECT_URI=http://localhost:3000/api/auth/callback
+# Google Service Account Credentials
+GOOGLE_SERVICE_ACCOUNT_EMAIL=your-service-account@project.iam.gserviceaccount.com
+GOOGLE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----"
+GOOGLE_PROJECT_ID=your-project-id
 
-# NextAuth Configuration
-NEXTAUTH_URL=http://localhost:3000
-NEXTAUTH_SECRET=your_nextauth_secret_here
+# Drive Configuration
+GOOGLE_DRIVE_FOLDER_ID=shared_drive_or_folder_id
 ```
 
-4. Configure Google OAuth:
+4. Configure Google Service Account:
 
    - Go to [Google Cloud Console](https://console.cloud.google.com/)
    - Create a new project or select an existing one
    - Enable the Google Drive API
-   - Create OAuth 2.0 credentials
-   - Add `http://localhost:3000/api/auth/callback` to authorized redirect URIs
+   - Create a Service Account in IAM & Admin
+   - Generate and download the JSON key file
+   - Share your Google Drive folder with the service account email
 
 ## Development
 
@@ -147,10 +147,10 @@ bun run start
 
 ## Security Considerations
 
-- All API routes are protected with authentication
-- OAuth tokens are stored securely
-- File access is limited to authenticated user's Drive
-- Environment variables are never exposed to the client
+- Service account credentials are stored securely in environment variables
+- File access is limited to folders explicitly shared with the service account
+- Private keys are never exposed to the client
+- All API operations use server-side authentication
 
 ## Contributing
 
